@@ -1,19 +1,17 @@
 /**
-* JimBot - Java IM Bot
-* Copyright (C) 2006-2009 JimBot project
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
+* JimBot - Java IM Bot Copyright (C) 2006-2012 JimBot project This program is
+* free software; you can redistribute it and/or modify it under the terms of
+* the GNU General Public License as published by the Free Software Foundation;
+* either version 2 of the License, or (at your option) any later version.
 * 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
 * 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* You should have received a copy of the GNU General Public License along with
+* this program; if not, write to the Free Software Foundation, Inc., 51
+* Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 package ru.jimbot;
 
@@ -37,7 +35,8 @@ import ru.jimbot.util.MainProps;
 * 
 */
 public final class Manager {
-private HashMap<String,AbstractServer> services = new HashMap<String,AbstractServer>(MainProps.getServicesCount());
+
+private HashMap<String, AbstractServer> services = new HashMap<String, AbstractServer>(MainProps.getServicesCount());
 private Monitor mon = new Monitor();
 private static Manager mn = null;
 private ConcurrentHashMap<String, Object> data = null;
@@ -48,34 +47,36 @@ private ConcurrentHashMap<String, Object> data = null;
 public Manager() {
 createState();
 mon.start();
-for(int i=0;i<MainProps.getServicesCount();i++){
-addService(MainProps.getServiceName(i),MainProps.getServiceType(i));
+for (int i = 0; i < MainProps.getServicesCount(); i++) {
+addService(MainProps.getServiceName(i), MainProps.getServiceType(i));
 }
 }
 
 /**
 * Возвращает нужный объект по ключу
+*
 * @param key
 * @return
 */
-public Object getData(String key){
-if(!data.containsKey(key)) return null;
+public Object getData(String key) {
+if (!data.containsKey(key)) return null;
 return data.get(key);
 }
 
 /**
 * Запоминает новое значение объекта
+*
 * @param key
 * @param o
 */
-public void setData(String key, Object o){
+public void setData(String key, Object o) {
 data.put(key, o);
 }
 
 /**
 * Перезапускает все действующие процессы
 */
-public  static void restart() {
+public static void restart() {
 mn.stopAll();
 mn.mon.stop();
 mn = null;
@@ -84,11 +85,13 @@ getInstance().startAll();
 }
 
 /**
-* Возвращает экземпляр класса. При необходимости производит его создание и инициализацию.
+* Возвращает экземпляр класса. При необходимости производит его создание и
+* инициализацию.
+*
 * @return
 */
 public static Manager getInstance() {
-if(mn==null){
+if (mn == null) {
 mn = new Manager();
 mn.data = new ConcurrentHashMap<String, Object>(1);
 }
@@ -97,6 +100,7 @@ return mn;
 
 /**
 * Общее число зареганых сервисов
+*
 * @return
 */
 public int getServiceCount() {
@@ -105,6 +109,7 @@ return services.keySet().size();
 
 /**
 * Возвращает набор имен сервисов (для последующего перебора)
+*
 * @return
 */
 public Set<String> getServiceNames() {
@@ -124,11 +129,9 @@ return;
 }
 r = new BufferedReader(new InputStreamReader(new FileInputStream("state")));
 String s = r.readLine();
-if(s.equals("Stop")) {
-exit();
-}
+if(s.equals("Stop")) exit();
 } catch (Exception ex) {
-ex.printStackTrace();
+Log.error(ex);
 } finally {
 if(r!=null){
 try{r.close();}catch(Exception e) {}
@@ -137,15 +140,14 @@ try{r.close();}catch(Exception e) {}
 }
 
 /**
-* Проверка подключения к БД. Повоторят попытку подключиться если база недоступна.
+* Проверка подключения к БД. Повоторят попытку подключиться если база
+* недоступна.
 */
-public void testDB(){
-for(String s : services.keySet()){
-if(services.get(s).isRun){
+public void testDB() {
+for (String s : services.keySet()) {
+if (services.get(s).isRun) {
 try {
-if(services.get(s).getDB().isClosed()){
-services.get(s).getDB().getDb();
-}
+if (services.get(s).getDB().isClosed()) services.get(s).getDB().getDb();
 } catch (SQLException e) {
 e.printStackTrace();
 }
@@ -156,9 +158,9 @@ e.printStackTrace();
 /**
 * Создает файл статуса программы
 */
-private void createState(){
+private void createState() {
 try {
-BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("state"))); 
+BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("state")));
 w.write("start");
 w.newLine();
 w.close();
@@ -168,12 +170,11 @@ ex.printStackTrace();
 }
 
 /**
-* 
+*
 */
 public void exit() {
 stopAll();
-if(MainProps.getBooleanProperty("main.StartHTTP"))
-Server.stopServer();
+if (MainProps.getBooleanProperty("main.StartHTTP")) Server.stopServer();
 mon.stop();
 Log.info("Exit bot " + new Date(System.currentTimeMillis()).toString());
 System.exit(0);
@@ -181,56 +182,63 @@ System.exit(0);
 
 /**
 * Добавление нового сервиса
+*
 * @param name
 * @param type = "anek", "chat"
 */
 public void addService(String name, String type) {
-if(type.equals("chat")) services.put(name, new ChatServer(name));
-else if (type.equals("anek"))services.put(name, new AnekServer(name));
-else Log.error("Неизвестный тип сервиса: "+type);		
+if (type.equals("chat"))
+services.put(name, new ChatServer(name));
+else if (type.equals("anek"))
+services.put(name, new AnekServer(name));
+else Log.error("Неизвестный тип сервиса: " + type);
 }
 
 /**
 * Удаление сервиса
+*
 * @param name
 */
-public void delService(String name){
-if(services.containsKey(name)){
-try{ 
+public void delService(String name) {
+if (services.containsKey(name)) {
+try {
 services.get(name).stop();
-} catch (Exception e) {}
+} catch (Exception e) {
+}
 services.remove(name);
-} else Log.error("Отсутствет сервис с именем "+name);
+} else Log.error("Отсутствет сервис с именем " + name);
 }
 
 /**
 * Запуск сервиса
+*
 * @param name
 */
-public void start(String name){
-if(services.containsKey(name)){
+public void start(String name) {
+if (services.containsKey(name)) {
 Log.info("Запускаю сервис: " + name);
 services.get(name).start();
-} else Log.error("Отсутствет сервис с именем "+name);
+} else Log.error("Отсутствет сервис с именем " + name);
 }
 
 /**
 * Остановка сервиса
+*
 * @param name
 */
-public void stop(String name){
-if(services.containsKey(name)){
+public void stop(String name) {
+if (services.containsKey(name)) {
 Log.info("Останавливаю сервис: " + name);
 services.get(name).stop();
-} else Log.error("Отсутствет сервис с именем "+name);
+} else Log.error("Отсутствет сервис с именем " + name);
 }
 
 /**
 * Запуск всех сервисов
 */
 public void startAll() {
-for(AbstractServer s : services.values()){
-if(s.getProps().isAutoStart()) s.start();
+for (AbstractServer s : services.values()) {
+if (s.getProps().isAutoStart()) s.start();
 }
 }
 
@@ -238,13 +246,14 @@ if(s.getProps().isAutoStart()) s.start();
 * Остановка всех сервисов
 */
 public void stopAll() {
-for(AbstractServer s : services.values()){
-if(s.isRun)s.stop();
+for (AbstractServer s : services.values()) {
+if (s.isRun) s.stop();
 }
 }
 
 /**
 * Возвращает ссылку на конкретный сервис
+*
 * @param name
 * @return
 */
@@ -254,11 +263,12 @@ return services.get(name);
 
 /**
 * Статус выполнения данного сервиса
+*
 * @param name
 * @return
 */
 public boolean isRun(String name) {
-if(services.containsKey(name)) return services.get(name).isRun;
+if (services.containsKey(name)) return services.get(name).isRun;
 else return false;
 }
 }

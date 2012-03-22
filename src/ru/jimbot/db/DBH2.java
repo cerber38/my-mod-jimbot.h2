@@ -1,19 +1,17 @@
 /**
-* JimBot - Java IM Bot
-* Copyright (C) 2006-2009 JimBot project
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
+* JimBot - Java IM Bot Copyright (C) 2006-2012 JimBot project This program is
+* free software; you can redistribute it and/or modify it under the terms of
+* the GNU General Public License as published by the Free Software Foundation;
+* either version 2 of the License, or (at your option) any later version.
 * 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
 * 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* You should have received a copy of the GNU General Public License along with
+* this program; if not, write to the Free Software Foundation, Inc., 51
+* Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 package ru.jimbot.db;
 
@@ -27,20 +25,23 @@ import ru.jimbot.util.Log;
 * @author Prolubnikov Dmitry
 */
 public abstract class DBH2 {
+
 private Connection db;
 private String name, user, pass;
 private long lastConnect = 0;
 
-/** Creates a new instance of DBH2 */
+/**
+* Creates a new instance of DBH2
+*/
 public DBH2() throws Exception {
 }
 
-public static Timestamp getTS(Timestamp t){
+public static Timestamp getTS(Timestamp t) {
 return t.equals(new Timestamp(0)) ? null : t;
 }
 
 public boolean isClosed() {
-if(db==null) return true;
+if (db == null) return true;
 try {
 return db.isClosed();
 } catch (Exception ex) {
@@ -52,7 +53,7 @@ return true;
 /**
 * Закрываем соединение с БД
 */
-public void shutdown(){
+public void shutdown() {
 try {
 db.close();
 } catch (SQLException ex) {
@@ -61,7 +62,7 @@ ex.printStackTrace();
 }
 
 public boolean openConnection(String ServisName, String user, String pass) {
-while(!open(ServisName, user, pass)){
+while (!open(ServisName, user, pass)) {
 }
 return true;
 }
@@ -70,7 +71,7 @@ return true;
 public abstract void createDB();
 
 public boolean open(String ServisName, String user, String pass) {
-boolean f=false;
+boolean f = false;
 try {
 if (db != null) {
 if (!db.isClosed()) return true;
@@ -79,19 +80,18 @@ if (!db.isClosed()) return true;
 ex.printStackTrace();
 }
 // Исключаем слишком частые подключения к БД
-if((System.currentTimeMillis()-lastConnect)<30000)
-return false;
+if ((System.currentTimeMillis() - lastConnect) < 30000) return false;
 try {
 Class.forName("org.h2.Driver");
-db = DriverManager.getConnection("jdbc:h2:services/"+ServisName+"/db/new", user, pass);
+db = DriverManager.getConnection("jdbc:h2:services/" + ServisName + "/db/new", user, pass);
 } catch (Exception ex) {
 ex.printStackTrace();
-f=false;
+f = false;
 lastConnect = System.currentTimeMillis();
 Log.talk("Ошибка подключения к базе данных!!!");
 }
 return f;
-}    
+}
 
 public void executeQuery(String qry) {
 Statement stmt = null;
