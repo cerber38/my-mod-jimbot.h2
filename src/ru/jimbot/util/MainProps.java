@@ -79,7 +79,13 @@ public class MainProps {
         setIntProperty("http.timeBlockLogin",20);
         setIntProperty("srv.servicesCount",0);
         setBooleanProperty("main.checkNewVer", true);
+        
+        setStringProperty("xmpp.status", "1");
     }
+    
+    private static String JabberStatus[][] = {{"1", "В сети"},{"2", "Готов поболтать"},
+{"3", "В гостях"}, {"4", "....."}, {"5", "Не беспокоить"}};
+
     
     public static UserPreference[] getUserPreference(){
         UserPreference[] p = {
@@ -92,8 +98,9 @@ public class MainProps {
             new UserPreference(UserPreference.INTEGER_TYPE,"http.timeErrLogin","Допустимый период между ошибками",getIntProperty("http.timeErrLogin")),
             new UserPreference(UserPreference.INTEGER_TYPE,"http.timeBlockLogin","Время блокировки входа",getIntProperty("http.timeBlockLogin")),
             new UserPreference(UserPreference.CATEGORY_TYPE,"bot", "Настройки бота",""),
-            new UserPreference(UserPreference.STRING_TYPE,"icq.serverDefault","ICQ Сервер 1",getStringProperty("icq.serverDefault")),
-            new UserPreference(UserPreference.INTEGER_TYPE,"icq.portDefault","ICQ Порт 1",getIntProperty("icq.portDefault")),
+            new UserPreference(UserPreference.SELECT_TYPE, "xmpp.status", "Jabber Статус", getStringProperty("xmpp.status"),JabberStatus),
+            new UserPreference(UserPreference.STRING_TYPE,"icq.serverDefault","ICQ Сервер",getStringProperty("icq.serverDefault")),
+            new UserPreference(UserPreference.INTEGER_TYPE,"icq.portDefault","ICQ Порт",getIntProperty("icq.portDefault")),
         };
         return p;
     }
