@@ -18,7 +18,7 @@
 
 package ru.jimbot.modules.anek;
 
-import ru.jimbot.db.DBAdaptor;
+import ru.jimbot.db.DBH2;
 import ru.jimbot.modules.AbstractProps;
 import ru.jimbot.modules.AbstractServer;
 import ru.jimbot.modules.MsgInQueue;
@@ -82,7 +82,7 @@ public class AnekServer extends AbstractServer{
          an.closeDB();
      }
      
-     public DBAdaptor getDB(){
+     public DBH2 getDB(){
     	 return an.db;
      }
      

@@ -24,9 +24,8 @@ package ru.jimbot;
  * @author Prolubnikov Dmitry
  */
 public class Monitor implements Runnable {
-    boolean isPause=false;
     private Thread th;
-    int sleepAmount = 1000;
+    private int sleepAmount = 1000;
     private static final int testMaxCount = 30; // Период проверки файла - 15с
     private int count =0;
     

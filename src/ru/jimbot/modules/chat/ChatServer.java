@@ -18,7 +18,7 @@
 
 package ru.jimbot.modules.chat;
 
-import ru.jimbot.db.DBAdaptor;
+import ru.jimbot.db.DBH2;
 import ru.jimbot.modules.AbstractProps;
 import ru.jimbot.modules.AbstractServer;
 import ru.jimbot.modules.MsgInQueue;
@@ -86,7 +86,7 @@ public class ChatServer extends AbstractServer{
         return con.uins.proc.get(icq[0]);
     }
     
-    public DBAdaptor getDB(){
+    public DBH2 getDB(){
     	return us.db;
     }
     

@@ -93,7 +93,6 @@ public class MsgInQueue implements Runnable {
             }else if(m.type==MsgQueueElement.TYPE_FLOOD_NOTICE){
             	cmd.parseFloodNotice(m.sn, m.msg, m.proc);
             } else {
-//                Log.info(m.u.nick);
                 cmd.parseInfo(m.u, m.info_type);
             }
             
@@ -118,25 +117,21 @@ public class MsgInQueue implements Runnable {
         receivers.add(new MsgReceiver(this,ip));
     }
     
-    public void addMsg(Protocol proc, String sn, String msg, boolean isOffline){
-        if(isOffline && ignoreOffline) {
+    public void addMsg(Protocol proc, String sn, String msg, boolean isOffline) {
+        if (isOffline && ignoreOffline) {
             Log.info("OFFLINE: " + sn + " - " + msg);
             return;
         }
         MsgStatCounter.getElement(proc.baseUin).addMsgCount();
-        if(!testFlood(sn))
-        	q.add(new MsgQueueElement(sn, msg, proc));
-        else {
-        	Log.flood("FLOOD from " + sn + ">> " + msg);
-        	MsgQueueElement e = new MsgQueueElement(sn,msg,proc);
-        	e.type = MsgQueueElement.TYPE_FLOOD_NOTICE;
-        	q.add(e);
+        MsgQueueElement e = new MsgQueueElement(sn, msg, proc);
+        if (!isOffline && !testFlood(sn)) {
+            Log.flood("FLOOD from " + sn + ">> " + msg);
+            e.type = MsgQueueElement.TYPE_FLOOD_NOTICE;
         }
-        	
+        q.add(e);
     }
-    
+        	
     public void addStatus(Protocol proc, String sn, String st){
-//        Log.info("ADD status in queue");
         MsgQueueElement m = new MsgQueueElement(sn, st, proc);
         m.type = MsgQueueElement.TYPE_STATUS;
         q.add(m);

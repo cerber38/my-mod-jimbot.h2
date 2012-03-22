@@ -23,13 +23,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 
-import ru.jimbot.db.DBAdaptor;
+import ru.jimbot.db.DBH2;
 
 /**
  *
  * @author Prolubnikov Dmitry
  */
-public class DBAneks extends DBAdaptor{
+public class DBAneks extends DBH2{
     
     /** Creates a new instance of DBAneks */
     public DBAneks() throws Exception  {

@@ -24,14 +24,14 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
 
-import ru.jimbot.db.DBAdaptor;
+import ru.jimbot.db.DBH2;
 import ru.jimbot.util.Log;
 
 /**
  *
  * @author Prolubnikov Dmitry
  */
-public class DBChat extends DBAdaptor{
+public class DBChat extends DBH2{
     private String serviceName = "";
     
     /** Creates a new instance of DBChat */

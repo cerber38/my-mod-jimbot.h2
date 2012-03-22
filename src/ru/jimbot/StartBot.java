@@ -39,8 +39,6 @@ public class StartBot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
             	Log.init("");
             	System.setErr(new PrintStream(new SystemErrLogger(), true));
                 MainProps.load();
@@ -64,7 +62,5 @@ public class StartBot {
                  } catch (Exception ex) {
                 	 ex.printStackTrace();
                  }
-//            }
-//        });
     }
 }

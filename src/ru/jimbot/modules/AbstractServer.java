@@ -20,7 +20,7 @@ package ru.jimbot.modules;
 
 import java.util.Vector;
 
-import ru.jimbot.db.DBAdaptor;
+import ru.jimbot.db.DBH2;
 import ru.jimbot.protocol.Protocol;
 /**
  *
@@ -65,7 +65,7 @@ public class AbstractServer {
     	return props;
     }
     
-    public DBAdaptor getDB(){
+    public DBH2 getDB(){
     	return null;
     }
     

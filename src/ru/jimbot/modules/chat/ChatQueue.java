@@ -15,12 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package ru.jimbot.modules.chat;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 import ru.jimbot.util.Log;
 
 /**
@@ -39,9 +38,7 @@ public class ChatQueue implements Runnable {
     // Список активных юзеров
     public ConcurrentHashMap <String,UinElement> uq;
     private int sleepAmount = 10000;
-    private int counter=0; //счетчик пользователей
     public int msgCounter=1; //счетчик сообщений
-    private boolean isNewMsg=true;
     
     /** Creates a new instance of ChatQueue */
     public ChatQueue(ChatServer s) {
@@ -80,7 +77,6 @@ public class ChatQueue implements Runnable {
      */
     public void addMsg(String m, String user, int room) {
         Log.debug("CHAT: Add msg "+m);
-        isNewMsg=true;
         mq.add(new MsgElement(m, msgCounter++, user, room));
     }
     
@@ -125,64 +121,71 @@ public class ChatQueue implements Runnable {
         return uq.containsKey(uin);
     }
     
-    /**
-     * Формирование общего сообщения для юзера из списка еще непрочитанных сообщений
-     */
-    public synchronized String createMsg(String uin) {
-    	String s = "";
-    	UinElement u = uq.get(uin);
-    	if(!mmq.containsKey(u.room)) return "";
-    	if(mmq.get(u.room).isEmpty()) return "";
-    	for(MsgElement m:mmq.get(u.room)){
-    		if(m.countID>u.lastMsg){
-    			if(!m.userSN.equalsIgnoreCase(uin) || !psp.getBooleanProperty("chat.ignoreMyMessage"))
-    				s += m.msg + '\n';
-    			u.lastMsg = m.countID;
-    		}
-    	}
-    	// Дополнительная проверка, на случай если юзер вышел во время формирования сообщения
-//    	((ChatCommandProc) srv.cmd).testState(uin);
-    	if(uq.containsKey(uin)) uq.put(uin,u);
-    	if(s.length()>1) return s.substring(0, s.length()-1);
-    	return s;
-    }
+            /**
+            * Формирование общего сообщения для юзера из списка еще непрочитанных сообщений
+            */
+            public synchronized String createMsg(String uin) {
+            String s = "";
+            UinElement u = uq.get(uin);
+            ConcurrentLinkedQueue<MsgElement> Queue = mmq.get(u.room);
+            boolean first = true;
+            if (Queue == null) return "";
+            if (Queue.isEmpty()) return "";
+            for (MsgElement m : Queue) {
+            if (m.countID > u.lastMsg) {
+            if (!m.userSN.equalsIgnoreCase(uin) || !psp.getBooleanProperty("chat.ignoreMyMessage")) {
+            if (first) {
+            s += m.msg;
+            first = false;
+            } else s += "\r\n" + m.msg;
+            }
+            u.lastMsg = m.countID;
+            }
+            }
+            return s;
+            }
     
-    public synchronized void send(){
-    	try {
-    		if (uq.isEmpty())
-				return;
-			if (mq.isEmpty())
-				return;
-			// Распихиваем все сообщения по очередям комнат
-			while (!mq.isEmpty()) {
-				MsgElement m = mq.poll();
-				ConcurrentLinkedQueue<MsgElement> q;
-				if (!mmq.containsKey(m.room))
-					q = new ConcurrentLinkedQueue<MsgElement>();
-				else
-					q = mmq.get(m.room);
-				q.add(m);
-				mmq.put(m.room, q);
-			}
-			// Перебираем юзеров, формируем сообщения на отправку, если что-то
-			// есть в очередях
-			for (String c : uq.keySet()) {
-				String s = createMsg(c);
-				((ChatCommandProc) srv.cmd).testState(c);
-				if (!s.isEmpty() && uq.containsKey(c))
-					srv.getIcqProcess(uq.get(c).baseUin).mq.add(uq.get(c).uin,
-							s);
-			}
-			// Очищаем очереди чата (все сообщения в них уже обработаны
-			for (int room : mmq.keySet()) {
-				if (!mmq.get(room).isEmpty())
-					mmq.get(room).clear();
-			}
-    	} catch (Exception ex) {
-    		ex.printStackTrace();
-    	}
-    }
-        
+                public synchronized void send() {
+                try {
+                if (uq.isEmpty()) {
+                mq.clear();
+                return;
+                }
+                if (mq.isEmpty()) return;
+                // Распихиваем все сообщения по очередям комнат
+                MsgElement m;
+                while ((m = mq.poll()) != null) {
+                ConcurrentLinkedQueue<MsgElement> q = mmq.get(m.room);
+                if (q == null) {
+                q = new ConcurrentLinkedQueue<MsgElement>();
+                mmq.put(m.room, q);
+                }
+                q.add(m);
+                }
+                // Перебираем юзеров, формируем сообщения на отправку, если что-то
+                // есть в очередях
+                for (Map.Entry<String, UinElement> c : uq.entrySet()) {
+                String uin = c.getKey();
+                String s = createMsg(uin);
+                if (s.length() == 0) {
+                continue;
+                }
+                ((ChatCommandProc) srv.cmd).testState(uin);
+                UinElement user = c.getValue();
+                if (user != null) {
+                srv.getIcqProcess(user.baseUin).mq.add(user.uin, s);
+                }
+                }
+                // Очищаем очереди чата (все сообщения в них уже обработаны
+                for (ConcurrentLinkedQueue<MsgElement> queue : mmq.values()) {
+                queue.clear();
+                }
+                } catch (Exception ex) {
+                ex.printStackTrace();
+                Log.error("Error: " + ex);
+                }
+                }
+  
     public void start(){
         th = new Thread(this,"ChatQueue");
         th.setPriority(Thread.NORM_PRIORITY);
