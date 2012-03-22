@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package ru.jimbot.modules.http;
+package ru.jimbot.http;
 
 import java.io.IOException;
 import java.util.Random;
@@ -27,7 +27,7 @@ import ru.jimbot.util.MainProps;
  *
  * @author Prolubnikov Dmitry
  */
-public class SrvUtil {
+public class HttpUtil {
 static final String HTML_HEAD =
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\"><HTML><HEAD>" +
             "<meta content=\"text/html; charset=windows-1251\" http-equiv=\"Content-Type\" />";

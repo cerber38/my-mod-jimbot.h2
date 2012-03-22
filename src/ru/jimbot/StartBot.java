@@ -22,7 +22,7 @@ import java.io.PrintStream;
 import java.util.Vector;
 
 import ru.jimbot.modules.WorkScript;
-import ru.jimbot.modules.http.Server;
+import ru.jimbot.http.Server;
 import ru.jimbot.util.Log;
 import ru.jimbot.util.MainProps;
 import ru.jimbot.util.SystemErrLogger;
@@ -32,7 +32,7 @@ import ru.jimbot.util.SystemErrLogger;
  * @author Prolubnikov Dmitriy
  *
  */
-public class StartBot3 {
+public class StartBot {
 	
 
 	/**
@@ -50,10 +50,10 @@ public class StartBot3 {
                         Vector<String> v = WorkScript.getInstance("").listHTTPScripts();
                         String[] s = new String[2+v.size()*2];
                         s[0] = "/";
-                        s[1] = "ru.jimbot.modules.http.MainPage";
+                        s[1] = "ru.jimbot.http.MainPage";
                         for(int i=0;i<v.size();i++){
                             s[i*2+2] = v.get(i);
-                            s[i*2+3] = "ru.jimbot.modules.http.HTTPScriptRequest";
+                            s[i*2+3] = "ru.jimbot.http.HTTPScriptRequest";
                         }
                         Server.startServer(s);
                     } catch (Exception ex) {

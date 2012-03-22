@@ -102,7 +102,7 @@ public class RoomWork {
         	pst.setInt(1, r.getId());
         	pst.setString(2, r.getName());
         	pst.setString(3, r.getTopic());
-        	pst.setString(4, "");
+        	pst.setString(4, r.getPass());
         	pst.setInt(5, r.getUser_id());
         	pst.execute();
         	pst.close();
@@ -119,7 +119,7 @@ public class RoomWork {
 	 * @param r
 	 * @return
 	 */
-	public boolean updateRoom(Rooms r, String pass) {
+	public boolean updateRoom(Rooms r) {
 		String q = "update rooms set name=?, topic=?, user_id=?, pass=? where id=?";
 		Log.debug("UPDATE rooms id=" + r.getId());
 		boolean f = false;
@@ -128,7 +128,7 @@ public class RoomWork {
 			pst.setInt(5, r.getId());
 			pst.setString(1, r.getName());
         	pst.setString(2, r.getTopic());
-        	pst.setString(4, pass);
+        	pst.setString(4, r.getPass());
         	pst.setInt(3, r.getUser_id());
         	pst.execute();
         	pst.close();

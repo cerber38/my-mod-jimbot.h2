@@ -138,7 +138,6 @@ public abstract class DBAdaptor {
         if (rSet.next()) {
           sTmp=new String [rSet.getMetaData().getColumnCount()];
           for (i = 1; i <= rSet.getMetaData().getColumnCount(); i++) {
-            //if (i > 1) sTmp += '\t';
             sTmp[i-1] = rSet.getString(i);
           }
         } else sTmp=null;
@@ -179,9 +178,7 @@ public abstract class DBAdaptor {
      * @throws SQLException 
      */
 	public Connection getDb() throws SQLException {
-		if(db.isClosed()){
-			openConnection(name, user, pass);
-		}
+		if(db.isClosed()) openConnection(name, user, pass);
 		return db;
 	}
 }

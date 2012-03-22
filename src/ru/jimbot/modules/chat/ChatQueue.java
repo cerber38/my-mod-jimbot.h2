@@ -184,7 +184,7 @@ public class ChatQueue implements Runnable {
     }
         
     public void start(){
-        th = new Thread(this);
+        th = new Thread(this,"ChatQueue");
         th.setPriority(Thread.NORM_PRIORITY);
         th.start();
     }

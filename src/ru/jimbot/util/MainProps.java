@@ -15,23 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package ru.jimbot.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Vector;
-
 import ru.jimbot.table.UserPreference;
 
 /**
@@ -42,13 +33,9 @@ import ru.jimbot.table.UserPreference;
 public class MainProps {
     public static final String VERSION = "v.0.4.0 pre 4 (06/07/2009)";
     public static final int VER_INT = 18;
-//    public static final String VER_DESC ="test version";
     private static int ver_no = 0;
     private static long ver_last_read = 0;
     private static String ver_desc = "";
-//    public static final String VER_DESC = "Поправлена работа при условии нестабильного соединения с MySQL;" +
-//    		"Кеширование скриптов;" +
-//    		"";
     public static final String PROG_TITLE = "jImBot";
     public static final String PROPS_FILE = "./jimbot.xml";
     public static final String ENCODING = "windows-1251";

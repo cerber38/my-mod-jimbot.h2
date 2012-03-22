@@ -31,11 +31,11 @@ import ru.jimbot.util.Log;
  * @author Prolubnikov Dmitry
  */
 public class MsgInQueue implements Runnable {
-    Vector<MsgReceiver> receivers; // список объектов, помещающих сообщения в эту очередь
-    AbstractCommandProcessor cmd;
-    ConcurrentLinkedQueue <MsgQueueElement> q;
+    private Vector<MsgReceiver> receivers; // список объектов, помещающих сообщения в эту очередь
+    private AbstractCommandProcessor cmd;
+    private ConcurrentLinkedQueue <MsgQueueElement> q;
     private Thread th;
-    int sleepAmount = 100;
+    private int sleepAmount = 100;
     public boolean ignoreOffline = true;
     // Пары уин - время последнего сообщения
     private HashMap<String,Long> flood;
@@ -70,26 +70,8 @@ public class MsgInQueue implements Runnable {
     	}
     }
     
-//    private synchronized void addMsgCount(){
-//    	msgCountAll++;
-//    	long c = System.currentTimeMillis();
-//    	if((c-msgTime[0])>60000)
-//    		msgCount[0] = msgCountAll-msgCount[0];
-//    	if((c-msgTime[1])>300000)
-//    		msgCount[1] = msgCountAll-msgCount[1];
-//    	if((c-msgTime[2])>3600000)
-//    		msgCount[2] = msgCountAll-msgCount[2];
-//    	if((c-msgTime[3])>86400000)
-//    		msgCount[3] = msgCountAll-msgCount[3];
-//    }
-    
-//    public synchronized int getMsgCount(int i){
-//    	if(i>3) return msgCountAll;
-//    	return msgCount[i];
-//    }
-    
     public void start(){
-        th = new Thread(this,"msg_in");
+        th = new Thread(this,"MsgInQueue");
         th.setPriority(Thread.NORM_PRIORITY);
         th.start();
     }

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package ru.jimbot.modules.http;
+package ru.jimbot.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,10 +24,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.garret.httpserver.JHttpServletRequest;
 import org.garret.httpserver.JHttpServletResponse;
 
@@ -81,10 +79,8 @@ public class HttpConnection {
     public HttpConnection(HttpServletRequest request, HttpServletResponse response) throws IOException {
         this.request = (JHttpServletRequest)request;
         this.response = (JHttpServletResponse)response;
-//        Log.info(request.getRemoteAddr()+"("+request.getRemoteHost()+") "+ request.getContextPath());
         response.setContentType("text/html; charset=\"windows-1251\"");
         response.setLocale(new Locale("ru","RU",""));
-        //writer = response.getWriter();
         os = response.getOutputStream();
     }
 }

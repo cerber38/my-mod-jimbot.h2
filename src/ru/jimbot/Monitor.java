@@ -23,7 +23,7 @@ package ru.jimbot;
  *
  * @author Prolubnikov Dmitry
  */
-public class Monitor2 implements Runnable {
+public class Monitor implements Runnable {
     boolean isPause=false;
     private Thread th;
     int sleepAmount = 1000;
@@ -31,11 +31,11 @@ public class Monitor2 implements Runnable {
     private int count =0;
     
     /** Creates a new instance of Monitor */
-    public Monitor2() {
+    public Monitor() {
     }
     
     public void start(){
-        th = new Thread(this,"monitor");
+        th = new Thread(this,"Monitor");
         th.setPriority(Thread.MIN_PRIORITY);
         th.start();
     }

@@ -52,7 +52,7 @@ public class MsgOutQueue implements Runnable {
     }    
     
     public void start(){
-        th = new Thread(this,"msg_out");
+        th = new Thread(this,"MsgOutQueue - "+proc.screenName);
         th.setPriority(Thread.NORM_PRIORITY);
         th.start();
     }

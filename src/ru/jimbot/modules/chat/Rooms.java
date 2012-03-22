@@ -73,6 +73,10 @@ public class Rooms {
 		this.user_id = user_id;
 	}
 
+        public String getPass() {
+		return pass;
+	}
+        
 	public boolean checkPass(String p) {
 		return pass.equals(p);
 	}

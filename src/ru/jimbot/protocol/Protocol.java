@@ -36,7 +36,7 @@ public abstract class Protocol {
     public String password = "";
     public String baseUin = "";
 
-    public MsgOutQueue mq=null;
+    public MsgOutQueue mq = null;
 
     protected MsgReceiver protList = null;
 

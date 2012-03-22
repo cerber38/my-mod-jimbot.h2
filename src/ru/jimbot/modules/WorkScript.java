@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import ru.jimbot.modules.anek.AnekCommandProc;
 import ru.jimbot.modules.chat.ChatCommandProc;
 import ru.jimbot.modules.chat.RobAdmin;
-import ru.jimbot.modules.http.HttpConnection;
+import ru.jimbot.http.HttpConnection;
 import ru.jimbot.protocol.Protocol;
 import ru.jimbot.util.Log;
 import bsh.Interpreter;

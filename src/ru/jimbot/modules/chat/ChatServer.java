@@ -18,13 +18,11 @@
 
 package ru.jimbot.modules.chat;
 
-//import org.pr_dim.jImBot.modules.IcqProc;
 import ru.jimbot.db.DBAdaptor;
 import ru.jimbot.modules.AbstractProps;
 import ru.jimbot.modules.AbstractServer;
 import ru.jimbot.modules.MsgInQueue;
 import ru.jimbot.modules.UINmanager;
-import ru.jimbot.modules.WorkScript;
 import ru.jimbot.protocol.Protocol;
 import ru.jimbot.util.MainProps;
 
@@ -42,7 +40,6 @@ public class ChatServer extends AbstractServer{
     private ChatProps props = null;
     
     /** Creates a new instance of ChatServer */
-
     public ChatServer(String name) {
     	this.setName(name);
     	ChatProps.getInstance(name).load();
@@ -55,9 +52,7 @@ public class ChatServer extends AbstractServer{
     }
     
     public void start() {
-//    	WorkScript.getInstance(getName()).startScript("start", "", this);
-        
-               icq = new String[ChatProps.getInstance(this.getName()).uinCount()];
+      icq = new String[ChatProps.getInstance(this.getName()).uinCount()];
         String[] pass = new String[ChatProps.getInstance(this.getName()).uinCount()];
         for(int i=0;i<ChatProps.getInstance(this.getName()).uinCount();i++){
             icq[i] = ChatProps.getInstance(this.getName()).getUin(i);
@@ -76,7 +71,6 @@ public class ChatServer extends AbstractServer{
     }
     
     public void stop() {
-//    	WorkScript.getInstance(getName()).startScript("stop", "", this);
         closeDB();
          con.uins.stop();
         isRun = false;

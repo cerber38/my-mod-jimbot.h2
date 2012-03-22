@@ -15,23 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package ru.jimbot.modules.chat;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
 import ru.jimbot.protocol.Protocol;
 import ru.jimbot.util.Log;
-import ru.jimbot.Messages;
 
 /**
  *
@@ -43,7 +36,6 @@ public final class UserWork {
     public static final int STATE_CHAT = 2;
     public static final int STATE_OFFLINE = 3;
     public static final int STATE_BANNED = -1;
-    
     private int currCountUser=0;
     public DBChat db;
     //Кэш для базы юзеров
@@ -53,7 +45,6 @@ public final class UserWork {
     //Кэш для объектов авторизации
     private ConcurrentHashMap <Integer,HashSet<String>> auth;
     //Список игнорируемых уинов
-//    private ArrayList<String> ignor;
     private String serviceName = "";
     private String user, pass;
     private RoomWork rw;
@@ -61,53 +52,24 @@ public final class UserWork {
     /** Creates a new instance of UserWork */
     public UserWork(String name) {
         try{
-        	serviceName = name;
-        	user = ChatProps.getInstance(name).getStringProperty("db.user");
-        	pass = ChatProps.getInstance(name).getStringProperty("db.pass");
+            serviceName = name;
+            user = ChatProps.getInstance(name).getStringProperty("db.user");
+            pass = ChatProps.getInstance(name).getStringProperty("db.pass");
             db = new DBChat(name);
             db.openConnection(name, user, pass);
-//            Sms.setDB(db);
             int usr=statUsersCount();
             uc = new ConcurrentHashMap<String,Users>(usr);
             uu = new ConcurrentHashMap<Integer,String>(usr);
             auth = new ConcurrentHashMap<Integer,HashSet<String>>(usr);
-//            ignor = new ArrayList();
             currCountUser=0;
             clearStatusUsers();
             rw = new RoomWork(db,usr);
             rw.fillCash();
-//            readIgnore();
         } catch (Exception ex){
             ex.printStackTrace();
         }
     }
-    
-//    public void readIgnore(){
-//        String s;
-//        try{
-//            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream("ignore.txt"),"windows-1251")); 
-//            while (r.ready()){
-//                s = r.readLine();
-//                if(!s.equals("")){
-//                    ignor.add(s);
-//                }
-//            }
-//            r.close();
-//        } catch (Exception ex){
-//            ex.printStackTrace();
-//        }
-//    }
-    
-//    public boolean testIgnor(String sn){
-//        if(ignor == null) return false;
-//        if(ignor.isEmpty()) return false;
-//        return ignor.contains(sn);
-//    }
-    
-//    public void ignore(String sn){
-//        ignor.add(sn);
-//    }
-    
+
     public void closeDB(){
         db.shutdown();
     }
@@ -154,7 +116,6 @@ public final class UserWork {
     public void clearStatusUsers(){
         db.executeQuery("update users set state=1 where state=3");
         db.executeQuery("update users set state=1 where state=2");
-//        db.commit();
     }
     
     /**
@@ -186,8 +147,7 @@ public final class UserWork {
      * Вывод последних ников пользователя
      */
     public String getUserNicks(int user_id){
-//        String s="Последние ники пользователя: ";
-    	String s=Messages.getString("UserWork.getUserNicks.0");
+        String s="Последние ники пользователя: ";
         try{
             PreparedStatement pst = db.getDb().prepareStatement("select t.msg from events t where t.type='REG' and t.user_id=" + 
                     user_id + " order by t.time desc");
@@ -211,8 +171,7 @@ public final class UserWork {
      * Вывод цепочки приглашений пользователя (кто его пригласил)
      */
     public String getUserInvites(int user_id) {
-//        String s = "Приглашения пользователя: ";
-    	String s=Messages.getString("UserWork.getUserInvites.0");
+        String s = "Приглашения пользователя: ";
         int i=0, k=user_id;
         while ((i=whoInviteUser(k))!=0){
             s += "["+i+"]"+getUser(i).localnick+"; ";
@@ -229,8 +188,7 @@ public final class UserWork {
     private String inviteList(int user_id){
         Vector<String[]> v = db.getValues("SELECT new_user FROM `invites` where user_id="+
                 user_id+" order by time");
-//        String s = "Кого приглашал: ";
-        String s=Messages.getString("UserWork.inviteList.0");
+        String s = "Кого приглашал: ";
         for(int i=0;i<v.size();i++){
             s += "["+v.get(i)[0]+"]"+getUser(Integer.parseInt(v.get(i)[0])).localnick+"; ";
         }
@@ -260,8 +218,7 @@ public final class UserWork {
      * Вывод истории киков
      */
     public String getKickHist() {
-//        String s = "20 последних киков:\n";
-    	String s=Messages.getString("UserWork.getKickHist.0")+"\n";
+        String s = "20 последних киков:\n";
         try {
             PreparedStatement pst = db.getDb().prepareStatement("select time, user_id, user_id2, msg from events where type='KICK' order by time desc");
             ResultSet rs = pst.executeQuery();
@@ -285,8 +242,7 @@ public final class UserWork {
      * Вывод истории банов
      */
     public String getBanHist() {
-//        String s = "20 последних банов:\n";
-    	String s=Messages.getString("UserWork.getBanHist.0")+"\n";
+        String s = "20 последних банов:\n";
         try {
             PreparedStatement pst = db.getDb().prepareStatement("select time, user_id, user_id2, msg from events where type='BAN' order by time desc");
             ResultSet rs = pst.executeQuery();
@@ -429,15 +385,9 @@ public final class UserWork {
         String s = "";
         try{
             PreparedStatement pst;
-//            if(MainProps.isExtdb())
                 pst = db.getDb().prepareStatement("select t.user_id, sum(length(t.msg)) cnt " +
                         "from log t where t.type = 'OUT' and t.user_id<>0 and time>=? " +
                         "group by t.user_id order by cnt desc limit 0,5");
-//            else
-//                pst = db.getDb().prepareStatement("select * from " +
-//                    "(select t.user_id, sum(length(t.msg)) cnt from log t where " +
-//                    "t.type = 'OUT' and t.user_id<>0 and time>=? group by t.user_id " +
-//                    ")tt order by tt.cnt desc ");
             pst.setTimestamp(1,new Timestamp(last));
             ResultSet rs = pst.executeQuery();
             for(int i=0;i<5;i++){
@@ -461,8 +411,7 @@ public final class UserWork {
      * Статистика по уинам
      */
     public String getUinStat(){
-//        String s = "Число пользователей на разных номерах чата:\n";
-    	String s = Messages.getString("UserWork.getUinStat.0") + "\n";
+        String s = "Число пользователей на разных номерах чата:\n";
         String[] uins = new String[ChatProps.getInstance(serviceName).uinCount()];
         int[] cnt = new int[ChatProps.getInstance(serviceName).uinCount()];
         for(int i=0;i<ChatProps.getInstance(serviceName).uinCount();i++){
@@ -567,7 +516,6 @@ public final class UserWork {
     public boolean isUsedNick(String n){
     	String q = "select count(*) from users where localnick like '"+n+"'";
     	Vector<String[]> v = db.getValues(q);
-//    	System.out.println(v.get(0)[0]);
     	return !v.get(0)[0].equals("0");
     }
     
@@ -579,7 +527,6 @@ public final class UserWork {
     public int getCountNickChange(int id) {
     	String q = "SELECT count(*) FROM `events` WHERE user_id="+id+" and type='REG' and (to_days( now( ) ) - to_days( time )) <1";
     	Vector<String[]> v = db.getValues(q);
-//    	System.out.println(Integer.parseInt(v.get(0)[0]));
     	return Integer.parseInt(v.get(0)[0]);
     }
     
@@ -649,7 +596,6 @@ public final class UserWork {
         u.id = id;
         uc.put(u.sn,u); //Кэшируем юзера
         db.insertObject(u);
-//        db.commit();
         currCountUser++;
         return id;
     }
@@ -657,7 +603,6 @@ public final class UserWork {
     public void updateUser(Users u) {
         uc.put(u.sn,u); //кэшируем юзера
         db.updateObject(u);
-//        db.commit();
     }
     
     public void reqUserInfo(String uin, Protocol proc) {
@@ -690,7 +635,6 @@ public final class UserWork {
         int i= count2();
         Invites p = new Invites(i, id);
         db.insertInvite(p);
-//        db.commit();
         return p.invite;
     }
     
@@ -704,7 +648,6 @@ public final class UserWork {
         p.new_user = getUser(uin).id;
         p.create_time = System.currentTimeMillis();
         db.updateInvite(p);
-//        db.commit();
         return true;
     }
     
@@ -759,9 +702,7 @@ public final class UserWork {
      * Определение доступных пользователю полномочий
      */
     public HashSet<String> getUserAuthObjects(int user_id){
-        if(auth.containsKey(user_id)){
-            return auth.get(user_id);
-        }
+        if(auth.containsKey(user_id)) return auth.get(user_id);
         String[] group = ChatProps.getInstance(serviceName).getStringProperty("auth.group_"+getUserGroup(user_id)).split(";");
         String[] grant = getUserPropsValue(user_id,"grant").split(";");
         String[] revoke = getUserPropsValue(user_id,"revoke").split(";");
@@ -778,9 +719,8 @@ public final class UserWork {
      * Вывод отчета о пользователе
      */
     public String getUserAuthInfo(int user_id){
-//        String s = "Полномочия пользователя ID=" + user_id + 
-//                "\nГруппа: " + getUserGroup(user_id) + "\nДоступные объекты: ";
-        String s = Messages.getString("UserWork.getUserAuthInfo.0", new Object[] {user_id, getUserGroup(user_id)});
+        String s = "Полномочия пользователя ID=" + user_id + 
+                "\nГруппа: " + getUserGroup(user_id) + "\nДоступные объекты: ";
         for(String sc:getUserAuthObjects(user_id)){
         	s += sc + ";";
         }
@@ -899,8 +839,8 @@ public final class UserWork {
      * @param pass
      * @return
      */
-    public boolean saveRoom(Rooms r, String pass){
-    	return rw.updateRoom(r, pass);
+    public boolean saveRoom(Rooms r){
+    	return rw.updateRoom(r);
     }
     
     /**
