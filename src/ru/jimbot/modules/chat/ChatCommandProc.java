@@ -297,9 +297,7 @@ infrequentSend(proc, uin, "Вы не можете войти в чат. Оста
 Log.info("CHAT_KICK: " + uin + ">" + mmsg);
 return;
 }
-if (srv.us.getUser(uin).state == UserWork.STATE_CHAT || srv.us.getUser(uin).state == UserWork.STATE_OFFLINE) {
-goChat(proc, uin);
-}
+if (srv.us.getUser(uin).state == UserWork.STATE_CHAT || srv.us.getUser(uin).state == UserWork.STATE_OFFLINE) goChat(proc, uin);
 } else {
 // Для нового юзера
 // Проверка на флуд
@@ -543,7 +541,7 @@ if (psp.getBooleanProperty("adm.useAdmin")) radm.parse(proc, uin, s, srv.us.getU
 } else {
 if (srv.us.getUser(uin).state == UserWork.STATE_NO_CHAT) {
 proc.mq.add(uin, "Для входа в чат используйте команду !чат.\n"
-        + "Для помощи пошлите команду !справка\n"
++ "Для помощи пошлите команду !справка\n"
 + "Не посылайте ваши сообщения слишком часто.");
 } else {
 proc.mq.add(uin, "Для входа в чат необходимо зарегистрироваться командой !ник <ник>. \n"
@@ -977,9 +975,7 @@ String oldNick = uss.localnick;
 //смена ника - юзер уже в чате, пароль не нужен
 if (uss.state != UserWork.STATE_NO_REG) {
 if (!auth(proc, uin, "reg")) return;
-if (uss.state != UserWork.STATE_CHAT) {
-return; // Менять ник тока в чате
-}
+if (uss.state != UserWork.STATE_CHAT) return; // Менять ник тока в чате
 if (srv.us.getCountNickChange(uss.id) > psp.getIntProperty("chat.maxNickChanged")) {
 proc.mq.add(uin, "Вы не можете так часто менять ник.");
 return;
@@ -1021,7 +1017,7 @@ proc.mq.add(uin, "", 1);
 Log.talk(uin + " Reg new user: " + mmsg);
 srv.us.db.log(id, uin, "REG", lnick, uss.room);
 srv.us.db.event(id, uin, "REG", 0, "", lnick);
-proc.mq.add(uin, "Регистрация завершена, вход pfв чат по команде !chat");
+proc.mq.add(uin, "Регистрация завершена, вход pfв чат по команде !чат");
 return;
 }
 // Регистрация по приглашению
@@ -1052,7 +1048,7 @@ int id = srv.us.addUser(uss);
 srv.us.updateInvite(uin, inv);// До этого ИД юзера был неизвестен!!!
 proc.mq.add(uin, "", 1);
 Log.talk(uin + " Reg new user: " + mmsg);
-proc.mq.add(uin, "Регистрация завершена, вход в чат по команде !chat");
+proc.mq.add(uin, "Регистрация завершена, вход в чат по команде !чат");
 srv.us.db.log(id, uin, "REG", lnick, uss.room);
 srv.us.db.event(id, uin, "REG", 0, "", lnick);
 }
@@ -1552,7 +1548,7 @@ int i = (Integer)v.get(0);
 String nick = (String)v.get(1);
 Users u = srv.us.getUser(i);
 Users uss = srv.us.getUser(uin);
-if (psp.testAdmin(u.sn)) {
+if (!psp.testAdmin(u.sn)) {
 proc.mq.add(uin, "Вы не можете сменить ник пользователя");
 return;
 }
@@ -1816,8 +1812,8 @@ return;
 if (uss.state == UserWork.STATE_CHAT) return; //Юзер уже в чате
 if (uss.state == UserWork.STATE_NO_CHAT) {
 Log.info("Add contact " + uin);
-//            if(proc.isNoAuthUin(uin)) proc.mq.add(uin, Messages.getString("ChatCommandProc.goChat.1"), 2);
-//            proc.addContactList(uin);
+// if(proc.isNoAuthUin(uin)) proc.mq.add(uin, Messages.getString("ChatCommandProc.goChat.1"), 2);
+// proc.addContactList(uin);
 uss.state = UserWork.STATE_CHAT;
 uss.basesn = proc.baseUin;
 srv.us.updateUser(uss);

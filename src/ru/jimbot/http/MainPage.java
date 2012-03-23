@@ -470,7 +470,7 @@ s += "UIN" + i + ": "
 + Manager.getInstance().getService(ns).getProps().getUin(i) + "\"> : "
 + "<INPUT TYPE=text NAME=\"pass_" + i + "\" VALUE=\"\"> : "
 + "<INPUT TYPE=text NAME=\"lenght_" + i + "\" VALUE=\""
-+ Manager.getInstance().getService(ns).getProps().getStringProperty("conn.MaxOutMsgSize" + Integer.toString(i)) + "\"> "
++ Manager.getInstance().getService(ns).getProps().getIntProperty("conn.MaxOutMsgSize" + i) + "\"> "
 + "<A HREF=\"" + con.getURI() + "?uid=" + uid + "&page=srvs_props_uin_del&ns=" + ns + "&cnt=" + i + "\">"
 + "Удалить</A><br>";
 }
@@ -525,7 +525,7 @@ if (!Manager.getInstance().getServiceNames().contains(ns)) {
 HttpUtil.error(con, "Отсутствует сервис с таким именем!");
 return;
 }
-Manager.getInstance().getService(ns).getProps().addUin("111", "pass", 300);
+Manager.getInstance().getService(ns).getProps().addUin("111", "pass", 1000);
 srvs_props_uin(con);
 }
 

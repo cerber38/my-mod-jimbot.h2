@@ -58,7 +58,7 @@ public String getUin(int i);
 
 public String getPass(int i);
 
-public String getMaxOut(int i);
+public int getMaxOut(int i);
 
 public int addUin(String uin, String pass, int lenght);
 

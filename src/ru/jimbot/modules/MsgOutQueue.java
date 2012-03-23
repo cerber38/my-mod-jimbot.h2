@@ -77,7 +77,7 @@ if (type != Msg.TYPE_MSG) {
 q.add(new Msg(uin, msg, type));
 return;
 }
-int maxLenMsg = Integer.parseInt(proc.getProps().getStringProperty("conn.MaxOutMsgSize" + Integer.toString(num)));
+int maxLenMsg = proc.getProps().getIntProperty("conn.MaxOutMsgSize" + num);
 int maxCountMsg = proc.getProps().getIntProperty("chat.MaxOutMsgCount");
 int m = (msg.length() / maxLenMsg + 1) > maxCountMsg ? maxCountMsg : (msg.length() / maxLenMsg + 1);
 for (int i = 0; i < m; i++) {

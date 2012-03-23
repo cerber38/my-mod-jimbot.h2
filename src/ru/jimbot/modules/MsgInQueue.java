@@ -122,7 +122,7 @@ return;
 }
 MsgStatCounter.getElement(proc.baseUin).addMsgCount();
 MsgQueueElement e = new MsgQueueElement(sn, msg, proc);
-if (!isOffline && !testFlood(sn)) {
+if (!isOffline && testFlood(sn)) {
 Log.flood("FLOOD from " + sn + ">> " + msg);
 e.type = MsgQueueElement.TYPE_FLOOD_NOTICE;
 }
