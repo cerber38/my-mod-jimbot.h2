@@ -64,7 +64,7 @@ appProps = new Properties();
 setIntProperty("conn.uinCount", 1);
 setStringProperty("conn.uin0", "111");
 setStringProperty("conn.pass0", "Password");
-setIntProperty("conn.MaxOutMsgSize0", 100);
+setStringProperty("conn.MaxOutMsgSize0", "300");
 setStringProperty("icq.status", "32");
 setStringProperty("icq.xstatus", "32");
 setStringProperty("icq.private.status", "1");
@@ -169,6 +169,10 @@ public String getPass(int i) {
 return getStringProperty("conn.pass" + i);
 }
 
+public String getMaxOut(int i) {
+return getStringProperty("conn.MaxOutMsgSize" + i);
+}
+
 /**
 * Изменение уина
 *
@@ -179,7 +183,7 @@ return getStringProperty("conn.pass" + i);
 public void setUin(int i, String uin, String pass, int lenght) {
 setStringProperty("conn.uin" + i, uin);
 setStringProperty("conn.pass" + i, pass);
-setIntProperty("conn.MaxOutMsgSize" + i, lenght);
+setStringProperty("conn.MaxOutMsgSize" + i, Integer.toString(lenght));
 }
 
 /**
@@ -194,7 +198,7 @@ int c = uinCount();
 setIntProperty("conn.uinCount", c + 1);
 setStringProperty("conn.uin" + c, uin);
 setStringProperty("conn.pass" + c, pass);
-setIntProperty("conn.MaxOutMsgSize" + c, lenght);
+setStringProperty("conn.MaxOutMsgSize" + c, Integer.toString(lenght));
 return c;
 }
 
@@ -209,11 +213,13 @@ for (int i = 0; i < (uinCount() - 1); i++) {
 if (i >= c) {
 setStringProperty("conn.uin" + i, getUin(i + 1));
 setStringProperty("conn.pass" + i, getPass(i + 1));
+setStringProperty("conn.MaxOutMsgSize" + i, getMaxOut(i + 1));
 }
 }
 //Удаляем самый последний элемент
 appProps.remove("conn.uin" + (uinCount() - 1));
 appProps.remove("conn.pass" + (uinCount() - 1));
+appProps.remove("conn.MaxOutMsgSize" + (uinCount() - 1));
 setIntProperty("conn.uinCount", uinCount() - 1);
 }
 

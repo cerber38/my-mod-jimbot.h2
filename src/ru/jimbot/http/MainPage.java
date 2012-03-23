@@ -473,11 +473,9 @@ for (int i = 0; i < Manager.getInstance().getService(ns).getProps().uinCount(); 
 s += "UIN" + i + ": "
 + "<INPUT TYPE=text NAME=\"uin_" + i + "\" VALUE=\""
 + Manager.getInstance().getService(ns).getProps().getUin(i) + "\"> : "
-+ "<INPUT TYPE=text NAME=\"pass_" + i + "\" VALUE=\""
-+ //				Manager.getInstance().getService(ns).getProps().getPass(i)+
-"\"> : "
++ "<INPUT TYPE=text NAME=\"pass_" + i + "\" VALUE=\"\"> : "
 + "<INPUT TYPE=text NAME=\"lenght_" + i + "\" VALUE=\""
-+ Manager.getInstance().getService(ns).getProps().getIntProperty("conn.MaxOutMsgSize" + i) + "\"> "
++ Manager.getInstance().getService(ns).getProps().getStringProperty("conn.MaxOutMsgSize" + Integer.toString(i)) + "\"> "
 + "<A HREF=\"" + con.getURI() + "?uid=" + uid + "&page=srvs_props_uin_del&ns=" + ns + "&cnt=" + i + "\">"
 + "Удалить</A><br>";
 }
