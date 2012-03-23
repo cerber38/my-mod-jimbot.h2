@@ -66,7 +66,7 @@ isRun = true;
 public void stop() {
 closeDB();
 an = null;
-inq.stop(); 	
+inq.stop();
 con.uins.stop();
 con.uins = null;
 System.gc(); 

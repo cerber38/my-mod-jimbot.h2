@@ -508,7 +508,7 @@ commandBanRoom(proc, uin, parser.parseArgs(tmsg));
 break;
 case 42:
 commandUBanRoom(proc, uin, parser.parseArgs(tmsg));
-break; 
+break;
 case 43:
 commandChNick(proc, uin, parser.parseArgs(tmsg));
 break;  

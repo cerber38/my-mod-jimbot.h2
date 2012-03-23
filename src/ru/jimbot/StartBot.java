@@ -16,7 +16,6 @@
 package ru.jimbot;
 
 import java.io.PrintStream;
-import java.util.Vector;
 import ru.jimbot.http.Server;
 import ru.jimbot.util.Log;
 import ru.jimbot.util.MainProps;
