@@ -60,12 +60,19 @@ inq = new MsgInQueue(cmd, us.statUsersCount());
 con.uins.start();
 for (Protocol p : con.uins.proc.values()) inq.addReceiver(p);
 inq.start();
+((ChatCommandProc) cmd).radm.start();// робот-админ
 isRun = true;
 }
 
 public void stop() {
 closeDB();
+us = null;
+inq.stop();
+cq.stop();   	
 con.uins.stop();
+con.uins = null;
+((ChatCommandProc) cmd).radm.stop();// робот-админ
+System.gc(); 
 isRun = false;
 }
 

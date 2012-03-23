@@ -158,7 +158,7 @@ String SenderID = chat.getParticipant().split("/")[0];
 JID.put(SenderID, message.getFrom());
 // игнорим извещения о наборе сообщения
 if (message.getBody() == null) return;
-if ("Too frequently, try to confirm your mobile number".indexOf(message.getBody())>0) return;
+if ("Too frequently, try to confirm your mobile number".contains(message.getBody())) return;
 // принимаем сообщение для дальнейших действий
 protList.getMsg(SenderID, screenName, message.getBody(), false);
 }

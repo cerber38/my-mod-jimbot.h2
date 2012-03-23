@@ -85,6 +85,7 @@ floodMap2 = new ConcurrentHashMap<String, FloodElement>(usr);
 floodNoReg = new ConcurrentHashMap<String, FloodElement>(usr);
 comMap = new HashMap<String, CommandExtend>(usr / 2);
 warnFlag = new HashSet<String>(usr);
+radm = new RobAdmin(srv);
 init();
 }
 
@@ -113,52 +114,113 @@ authObj.put("chgkick", "Изменение времени кика");
 authObj.put("dblnick", "Разрешено дублировать ник");
 authObj.put("anyroom", "Переход в любую комнату");
 authObj.put("wroom", "Создавать и изменять комнаты");
+authObj.put("chnick","команда изменения ника другого пользователя");
+authObj.put("banroom","Запереть юзера в комнате");
 
+commands.put("!about", new Cmd("!about", "", 1));
+commands.put("!оботе", new Cmd("!оботе", "", 1));
+commands.put("!о", new Cmd("!о", "", 1));
 commands.put("!help", new Cmd("!help", "", 2));
+commands.put("!справка", new Cmd("!справка", "", 2));
+commands.put("!помощь", new Cmd("!помощь", "", 2));
+commands.put("!команды", new Cmd("!команды", "", 2));
 commands.put("!chat", new Cmd("!chat", "", 3));
+commands.put("!чат", new Cmd("!чат", "", 3));
+commands.put("!вход", new Cmd("!вход", "", 3));
 commands.put("!exit", new Cmd("!exit", "", 4));
+commands.put("!выход", new Cmd("!выход", "", 4));
 commands.put("!rules", new Cmd("!rules", "", 5));
+commands.put("!правила", new Cmd("!правила", "", 5));
+commands.put("!законы", new Cmd("!законы", "", 5));
 commands.put("!stat", new Cmd("!stat", "", 6));
+commands.put("!стат", new Cmd("!стат", "", 6));
 commands.put("!gofree", new Cmd("!gofree", "", 7));
+commands.put("!свюин", new Cmd("!свюин", "", 7));
+commands.put("!свуин", new Cmd("!свуин", "", 7));
 commands.put("!go", new Cmd("!go", "$n", 8));
+commands.put("!юин", new Cmd("!юин", "$n", 8));
 commands.put("!invite", new Cmd("!invite", "", 9));
+commands.put("!приглашение", new Cmd("!приглашение", "", 9));
 commands.put("!banlist", new Cmd("!banlist", "", 10));
+commands.put("!банлист", new Cmd("!банлист", "", 10));
 commands.put("!kicklist", new Cmd("!kicklist", "", 11));
+commands.put("!киклист", new Cmd("!киклист", "", 11));
 commands.put("!info", new Cmd("!info", "$c", 12));
+commands.put("!инфо", new Cmd("!инфо", "$c", 12));
 commands.put("!kick", new Cmd("!kick", "$c $n $s", 13));
+commands.put("!кик", new Cmd("!кик", "$c $n $s", 13));
 commands.put("!kickall", new Cmd("!kickall", "", 14));
+commands.put("!киквсех", new Cmd("!киквсех", "", 14));
 commands.put("!listauth", new Cmd("!listauth", "", 15));
+commands.put("!листаут", new Cmd("!листаут", "", 15));
 commands.put("!who", new Cmd("!who", "$n", 16));
+commands.put("!кто", new Cmd("!кто", "$n", 16));
 commands.put("!listgroup", new Cmd("!listgroup", "", 17));
+commands.put("!листгрупп", new Cmd("!листгрупп", "", 17));
+commands.put("!группы", new Cmd("!группы", "", 17));
 commands.put("!checkuser", new Cmd("!checkuser", "$n", 18));
+commands.put("!проверка", new Cmd("!проверка", "$n", 18));
 commands.put("!setgroup", new Cmd("!setgroup", "$n $c", 19));
+commands.put("!группа", new Cmd("!группа", "$n $c", 19));
 commands.put("!grant", new Cmd("!grant", "$n $c", 20));
-commands.put("!revoke", new Cmd("!revoke", "$n $c", 21));
+commands.put("!добавить", new Cmd("!добавить", "$n $c", 20));
+commands.put("!revoke", new Cmd("!revoke", "$n $c $s", 21));
+commands.put("!лишить", new Cmd("!лишить", "$n $c $s", 21));
 commands.put("!ban", new Cmd("!ban", "$c $s", 22));
+commands.put("!бан", new Cmd("!бан", "$c $s", 22));
 commands.put("!uban", new Cmd("!uban", "$c", 23));
+commands.put("!убан", new Cmd("!убан", "$c", 23));
 commands.put("!reg", new Cmd("!reg", "$c $c", 24));
+commands.put("!ник", new Cmd("!ник", "$c $c", 24));
+commands.put("!рег", new Cmd("!рег", "$c $c", 24));
 commands.put("+a", new Cmd("+a", "", 25));
 commands.put("+а", new Cmd("+а", "", 25));
 commands.put("+f", new Cmd("+f", "", 25));
 commands.put("+ф", new Cmd("+ф", "", 25));
+commands.put("!тут", new Cmd("!тут", "", 25));
 commands.put("+p", new Cmd("+p", "$n $s", 26));
 commands.put("+р", new Cmd("+р", "$n $s", 26));
+commands.put("!лс", new Cmd("!лс", "$n $s", 26));
 commands.put("+pp", new Cmd("+pp", "$s", 27));
 commands.put("+рр", new Cmd("+рр", "$s", 27));
+commands.put("!ответ", new Cmd("!ответ", "$s", 27));
 commands.put("!settheme", new Cmd("!settheme", "$s", 28));
+commands.put("!тема", new Cmd("!тема", "$s", 28));
 commands.put("!getinfo", new Cmd("!getinfo", "$c", 29));
-commands.put("!room", new Cmd("!room", "$n", 33));
-commands.put("!whoinvite", new Cmd("!whoinvite", "$n", 34));
-commands.put("!kickhist", new Cmd("!kickhist", "", 35));
-commands.put("!adm", new Cmd("!adm", "$s", 36));
-commands.put("!banhist", new Cmd("!banhist", "", 37));
-commands.put("+aa", new Cmd("+aa", "", 38));
-commands.put("+аа", new Cmd("+аа", "", 38));
-commands.put("!lroom", new Cmd("!lroom", "", 40));
-commands.put("!crroom", new Cmd("!crroom", "$n $s", 41));
-commands.put("!chroom", new Cmd("!chroom", "$n $s", 42));
-WorkScript.getInstance(srv.getName()).installAllChatCommandScripts(this);
-commands.put("!about", new Cmd("!about", "", 1));
+commands.put("!аська", new Cmd("!аська", "$c", 29));
+commands.put("!room", new Cmd("!room", "$n $c", 30));
+commands.put("!комната", new Cmd("!комната", "$n $c", 30));
+commands.put("!к", new Cmd("!к", "$n $c", 30));
+commands.put("!whoinvite", new Cmd("!whoinvite", "$n", 31));
+commands.put("!пригласил", new Cmd("!пригласил", "$n", 31));
+commands.put("!ктопригласил", new Cmd("!ктопригласил", "$n", 31));
+commands.put("!kickhist", new Cmd("!kickhist", "", 32));
+commands.put("!кикист", new Cmd("!кикист", "", 32));
+commands.put("!adm", new Cmd("!adm", "$s", 33));
+commands.put("!админу", new Cmd("!админу", "$s", 33));
+commands.put("!banhist", new Cmd("!banhist", "", 34));
+commands.put("!банист", new Cmd("!банист", "", 34));
+commands.put("+aa", new Cmd("+aa", "", 35));
+commands.put("+аа", new Cmd("+аа", "", 35));
+commands.put("!все", new Cmd("!все", "", 35));
+commands.put("!lroom", new Cmd("!lroom", "", 36));
+commands.put("!комнаты", new Cmd("!комнаты", "", 36));
+commands.put("!crroom", new Cmd("!crroom", "$n $s", 37));
+commands.put("!создкомн", new Cmd("!создкомн", "$n $s", 37));
+commands.put("!chroom", new Cmd("!chroom", "$n $s", 38));
+commands.put("!измкомн", new Cmd("!измкомн", "$n $s", 38));
+commands.put("!delroom", new Cmd("!delroom", "$n", 39));
+commands.put("!удалить", new Cmd("!удалить", "$n", 39));
+commands.put("!setpass", new Cmd("!setpass", "$c", 40));
+commands.put("!пароль", new Cmd("!пароль", "$c", 40));
+commands.put("!banroom", new Cmd("!banroom", "$n $n", 41));
+commands.put("!запереть", new Cmd("!запереть", "$n $n", 41));
+commands.put("!закрыть", new Cmd("!закрыть", "$n $n", 41));
+commands.put("!ubanroom", new Cmd("!ubanroom", "$n", 42));
+commands.put("!выпустить", new Cmd("!выпустиь", "$n", 42));
+commands.put("!chnick", new Cmd("!chnick", "$n $c", 43));
+commands.put("!смник", new Cmd("!смник", "$n $c", 43));
+commands.put("!измник", new Cmd("!измник", "$n $c", 43));
 }
 
 /**
@@ -180,32 +242,6 @@ return this.commands;
 }
 
 /**
-* Добавление нового объекта полномочий
-*
-* @param name
-* @param comment
-* @return - истина, если такой объект уже был в таблице
-*/
-public boolean addAuth(String name, String comment) {
-boolean f = authObj.containsKey(name);
-authObj.put(name, comment);
-return f;
-}
-
-/**
-* Добавление новой команды
-*
-* @param name
-* @param c
-* @return - истина, если команда уже существует
-*/
-public boolean addCommand(String name, Cmd c) {
-boolean f = commands.containsKey(name);
-commands.put(name, c);
-return f;
-}
-
-/**
 * Возвращает экземпляр парсера
 *
 * @return
@@ -222,12 +258,7 @@ return parser;
 private void firstMsg(Protocol proc) {
 if (!firstStartMsg) {
 String[] s = srv.getProps().getAdmins();
-for (int i = 0; i < s.length; i++) {
-String ss = "Бот успешно запущен!\n";
-if (MainProps.checkNewVersion()) ss += "На сайте http://jimbot.ru Доступна новая версия!\n" + MainProps.getNewVerDesc();
-else ss += "Вся информация о боте из первых рук только на сайте: http://jimbot.ru";
-proc.mq.add(s[i], ss);
-}
+for (int i = 0; i < s.length; i++) proc.mq.add(s[i], "Бот успешно запущен!\n");
 firstStartMsg = true;
 }
 }
@@ -240,10 +271,6 @@ return srv;
 * Основная процедура парсера команд
 */
 public void parse(Protocol proc, String uin, String mmsg) {
-if (radm == null) {
-radm = new RobAdmin(srv);
-radm.start();
-}
 firstMsg(proc);
 state++;
 Log.debug("CHAT: parse " + proc.baseUin + ", " + uin + ", " + mmsg);
@@ -300,21 +327,20 @@ if (tmsg.charAt(0) != '!' && !comMap.containsKey(uin)) {
 // Если это не команда - выводим приветствие, иначе обрабатываем команду
 if (!psp.getBooleanProperty("chat.FreeReg")) {
 proc.mq.add(uin, "Добро пожаловать в чат!\n"
-+ "Для помощи пошлите команду !help\n"
++ "Для помощи пошлите команду !справка\n"
 + "Не посылайте одинаковых сообщений и сообщения чаще "
 + psp.getIntProperty("chat.floodTimeLimitNoReg") + " сек.\n"
 + psp.getStringProperty("chat.inviteDescription"));
 } else {
 proc.mq.add(uin, "Добро пожаловать в чат! \n"
 + "Чтобы зарегистрироваться используйте команду !reg <ник>\n"
-+ "Для помощи пошлите команду !help\n"
++ "Для помощи пошлите команду !справка\n"
 + "Не посылайте одинаковых сообщений и сообщения чаще "
 + psp.getIntProperty("chat.floodTimeLimitNoReg") + " сек.\n");
 }
 return;
 }
 }
-//            checkNewVersion(proc);
 // Проверка на флуд
 if (floodMap.containsKey(uin)) {
 FloodElement e = floodMap.get(uin);
@@ -326,8 +352,7 @@ e.addMsg(tmsg);
 floodMap.put(uin, e);
 }
 if (testFlood(proc, uin)) return;
-mmsg = WorkScript.getInstance(srv.getName()).startMessagesScript(mmsg, srv);
-if (mmsg.isEmpty()) return; // Сообщение было удалено в скрипте
+if (mmsg.isEmpty()) return; // Сообщение было удалено
 int tp = 0;
 if (comMap.containsKey(uin) && srv.getProps().getBooleanProperty("chat.useCaptcha")) {
 if (!comMap.get(uin).isExpire()) tp = parser.parseCommand(comMap.get(uin).getCmd());
@@ -355,7 +380,7 @@ exitChat(proc, uin);
 break;
 case 5:
 if (!isChat(proc, uin) && !psp.testAdmin(uin)) break;
-proc.mq.add(uin, psp.getChatRules());
+proc.mq.add(uin, psp.getChatRules(srv.getName()));
 break;
 case 6:
 if (!psp.testAdmin(uin)) break;
@@ -448,45 +473,47 @@ case 29:
 commandGetinfo(proc, uin, parser.parseArgs(tmsg));
 break;
 case 30:
-//                commandGetversion(proc, uin, parser.parseArgs(tmsg));
-break;
-case 31:
-//                commandNewversion(proc, uin, parser.parseArgs(tmsg));
-break;
-//            case 32:
-//                commandExec(proc, uin, parser.parseArgs(tmsg));
-//                break;
-case 33:
 commandRoom(proc, uin, parser.parseArgs(tmsg));
 break;
-case 34:
+case 31:
 commandWhoinvite(proc, uin, parser.parseArgs(tmsg));
 break;
-case 35:
+case 32:
 commandKickhist(proc, uin);
 break;
-case 36:
+case 33:
 commandAdm(proc, uin, parser.parseArgs(tmsg));
 break;
-case 37:
+case 34:
 commandBanhist(proc, uin);
 break;
-case 38:
+case 35:
 commandAA(proc, uin);
 break;
-case 39: // Обработка команды макросом
-String ret = WorkScript.getInstance(srv.getName()).startChatCommandScript(parser.parseCommand2(tmsg).script, tmsg, uin, proc, this);
-if (!ret.isEmpty() && !ret.equals("ok")) proc.mq.add(uin, "Ошибка выполнения команды");
-break;
-case 40:
+case 36:
 commandLRoom(proc, uin);
 break;
-case 41:
+case 37:
 commandCrRoom(proc, uin, parser.parseArgs(tmsg));
 break;
-case 42:
+case 38:
 commandChRoom(proc, uin, parser.parseArgs(tmsg));
 break;
+case 39:
+commandDelRoom(proc, uin, parser.parseArgs(tmsg));
+break;
+case 40:
+commandSetpass(proc, uin, parser.parseArgs(tmsg));
+break;
+case 41:
+commandBanRoom(proc, uin, parser.parseArgs(tmsg));
+break;
+case 42:
+commandUBanRoom(proc, uin, parser.parseArgs(tmsg));
+break; 
+case 43:
+commandChNick(proc, uin, parser.parseArgs(tmsg));
+break;  
 default:
 if (srv.us.getUser(uin).state == UserWork.STATE_CHAT) {
 //Сообщения начинающиеся с "!" и "+" не выводим в чат
@@ -515,11 +542,12 @@ if (psp.getBooleanProperty("adm.useAdmin")) radm.parse(proc, uin, s, srv.us.getU
 ////
 } else {
 if (srv.us.getUser(uin).state == UserWork.STATE_NO_CHAT) {
-proc.mq.add(uin, "Для входа в чат используйте команду !chat. Для помощи пошлите команду !help\n"
+proc.mq.add(uin, "Для входа в чат используйте команду !чат.\n"
+        + "Для помощи пошлите команду !справка\n"
 + "Не посылайте ваши сообщения слишком часто.");
 } else {
-proc.mq.add(uin, "Для входа в чат необходимо зарегистрироваться командой !reg. \n"
-+ "Для помощи пошлите команду !help\n"
+proc.mq.add(uin, "Для входа в чат необходимо зарегистрироваться командой !ник <ник>. \n"
++ "Для помощи пошлите команду !справка\n"
 + "Не посылайте ваши сообщения слишком часто.");
 }
 }
@@ -540,10 +568,10 @@ Log.error(element);
 * !help
 */
 public void commandHelp(Protocol proc, String uin) {
-String[] s = psp.getHelp1().split("<br>");
+String[] s = psp.getHelp1(srv.getName()).split("<br>");
 for (int i = 0; i < s.length; i++) proc.mq.add(uin, s[i]);
 if (srv.us.authorityCheck(uin, "exthelp")) {
-s = psp.getHelp2().split("<br>");
+s = psp.getHelp2(srv.getName()).split("<br>");
 for (int i = 0; i < s.length; i++) proc.mq.add(uin, s[i]);
 }
 }
@@ -1076,7 +1104,7 @@ proc.mq.add(uin, s);
 */
 public void commandAA(Protocol proc, String uin) {
 if (!isChat(proc, uin) && !psp.testAdmin(uin)) return;
-String s = "Список пользователей в чате\n";
+String s = "Список пользователей в чате:\n";
 if (psp.getBooleanProperty("adm.useAdmin")) s += "0 - " + radm.NICK + '\n';
 Enumeration<String> e = srv.cq.uq.keys();
 while (e.hasMoreElements()) {
@@ -1381,6 +1409,173 @@ Rooms r = srv.us.getRoom(room);
 r.setName(s);
 srv.us.saveRoom(r);
 proc.mq.add(uin, "Комната " + room + " успешно изменена!");
+}
+
+/**
+ * !delroom - удаление комнаты
+ * 
+ * @param proc
+ * @param uin
+ * @param v 
+ */
+private void commandDelRoom(Protocol proc, String uin, Vector v){
+if (!isChat(proc, uin) && !psp.testAdmin(uin)) return;
+if (!auth(proc, uin, "wroom")) return;
+int room = (Integer) v.get(0);
+Users uss = srv.us.getUser(uin);
+if (!srv.us.checkRoom(room)){
+proc.mq.add(uin, "Такой комнаты не существует!");
+return;
+}
+Rooms rooms = new Rooms();
+rooms.setId(room);
+srv.us.deleteRoom(rooms);
+proc.mq.add(uin, "Комната " + room + " была успешно удалена");
+srv.cq.addMsg("Была удалена комната " + srv.us.getRoom(room).getName() + "|" + room + "| пользователем " + uss.localnick + "|" + uss.id + "|", uin, uss.room);
+}
+
+
+/**
+* Установка пароля на комнату
+* !пароль <pass>
+* @author jimbot
+*/
+private void commandSetpass(Protocol proc, String uin, Vector v){
+if(!auth(proc,uin, "wroom")) return;
+String s = (String)v.get(0);
+int room = srv.us.getUser(uin).room;
+Rooms r = srv.us.getRoom(room);
+if("".equals(s)){
+r.setPass("");
+proc.mq.add(uin,"Убран пароль с комнаты "+srv.us.getRoom(room).getName());
+}
+r.setPass(s);
+srv.us.saveRoom(r);
+proc.mq.add(uin,"Пароль "+s+" на комнату "+srv.us.getRoom(room).getName()+" успешно установлен.");
+}
+
+/**
+* !banroom - запереть в комнате
+*
+* @param proc
+* @param uin
+* @param v
+*/
+private void commandBanRoom(Protocol proc, String uin, Vector v) {
+if (!isChat(proc, uin) && !psp.testAdmin(uin)) return;
+if (!auth(proc, uin, "banroom")) return;
+try {
+//Согласно шаблону, оба аргумента должны быть числами
+int i1 = (Integer) v.get(0);
+int i2 = (Integer) v.get(1);
+// Находим юзера
+Users u = srv.us.getUser(i1);
+// Проверяем есть ли такой юзер ваще?
+if (u.id == 0) {
+proc.mq.add(uin, "Пользователь не найден");
+return;
+}
+if (u.state != UserWork.STATE_CHAT) {
+proc.mq.add(uin, "Этого пользователя нет в чате.");
+return;
+}
+// Переводим в комнату
+if (u.room == i2) {
+proc.mq.add(uin, "Пользователь уже сидит в этой комнате");
+return;
+} else {
+u.room = i2;
+srv.us.updateUser(u);
+srv.cq.changeUserRoom(u.sn, i2);
+// Оповещаем целевую комнату
+srv.cq.addMsg(u.localnick + " вошел в комнату " + u.room, u.sn, u.room);
+// Оповещаем юзера
+srv.getIcqProcess(u.basesn).mq.add(u.sn, "Ты заперт в комнате " + i2);
+// Лишаем юзера прав на комнаты
+srv.us.revokeUser(i1, "room");
+}
+// Сообщаем об успешном выполнении команды
+proc.mq.add(uin, "Пользователь " + u.localnick + " успешно заперт в комнате " + i2);
+} catch (Exception ex) {
+ex.printStackTrace();
+proc.mq.add(uin, "Ошибка " + ex.getMessage());
+}
+}
+
+/**
+* !ubanroom - выпустить юзера
+*     
+* @param proc
+* @param uin
+* @param v
+*/
+private void commandUBanRoom(Protocol proc, String uin, Vector v) {
+// Проверим полномочия
+if (!isChat(proc, uin) && !psp.testAdmin(uin)) return;
+if (!auth(proc, uin, "banroom")) return;
+try {
+//Согласно шаблону, аргумент должн быть числом
+int i1 = (Integer) v.get(0);
+// Находим юзера
+Users u = srv.us.getUser(i1);
+// Проверяем есть ли такой юзер ваще?
+if (u.id == 0) {
+proc.mq.add(uin, "Пользователь не найден");
+return;
+}
+// Возвращаем права
+srv.us.grantUser(i1, "room");
+if (u.state == UserWork.STATE_CHAT) {
+srv.getIcqProcess(u.basesn).mq.add(u.sn, "Тебе разрешено выходить за пределы этой комнаты");
+}
+// Сообщаем об успешном выполнении команды
+proc.mq.add(uin, "Пользователю " + u.localnick + " возвращены права на переход по комнатам");
+} catch (Exception ex) {
+ex.printStackTrace();
+proc.mq.add(uin, "Ошибка " + ex.getMessage());
+}
+}
+
+/**
+* !chnick - смена ника пользователю
+* 
+* @param proc
+* @param uin
+* @param v
+* @param mmsg
+*/
+private void commandChNick(Protocol proc, String uin, Vector v){
+if(!isChat(proc,uin) && !psp.testAdmin(uin)) return;
+if(!auth(proc,uin, "chnick")) return;
+try{
+int i = (Integer)v.get(0);
+String nick = (String)v.get(1);
+Users u = srv.us.getUser(i);
+Users uss = srv.us.getUser(uin);
+if (psp.testAdmin(u.sn)) {
+proc.mq.add(uin, "Вы не можете сменить ник пользователя");
+return;
+}
+if(u.id == 0){
+proc.mq.add(uin,"Пользователь не найден");
+return;
+}
+if (uin.equals(u.sn)){
+proc.mq.add(uin, "Для смены своего ника используй !рег <ник>");
+return;
+}
+String oldNick = u.localnick;
+u.localnick=nick;
+srv.us.updateUser(u);
+srv.us.db.event(u.id, uin, "REG", 0, "", nick);
+if(u.state == UserWork.STATE_CHAT){
+srv.cq.addMsg("У пользователя " + oldNick + " ник изменен на " + nick+ " изменил его пользователь " +uss.localnick, "", u.room);
+}
+proc.mq.add(uin,"Ник успешно изменен");
+}catch (Exception ex){
+ex.printStackTrace();
+Log.error("Ошибка - " + ex.getMessage());
+}
 }
 
 /**

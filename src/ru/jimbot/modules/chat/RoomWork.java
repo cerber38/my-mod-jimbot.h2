@@ -141,6 +141,24 @@ ex.printStackTrace();
 return f;
 }
 
+public boolean deleteRoom(Rooms r){
+String q = "delete from rooms where id=?";
+Log.debug("DELETE room id=" + r.getId());
+boolean f = false;
+try{
+PreparedStatement pst = db.getDb().prepareStatement(q);
+pst.setInt(1, r.getId());
+pst.execute();
+pst.close();
+rc.remove(r.getId());
+f=true;
+}
+catch (Exception ex){
+ex.printStackTrace();
+}
+return f;
+}
+
 public Set<Integer> getRooms() {
 return rc.keySet();
 }

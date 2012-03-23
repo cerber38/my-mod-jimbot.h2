@@ -60,17 +60,16 @@ for (Protocol p : con.uins.proc.values()) {
 inq.addReceiver(p);
 }
 inq.start();
-// Удалить из запуска инициализацию базы. Она должна проходить по мере необходимости.
-WorkScript.getInstance(getName()).startScript("start", "", this);
-//         an.initDB();
 isRun = true;
 }
 
 public void stop() {
-WorkScript.getInstance(getName()).startScript("stop", "", this);
-inq.stop();
-con.uins.stop();
 closeDB();
+an = null;
+inq.stop(); 	
+con.uins.stop();
+con.uins = null;
+System.gc(); 
 isRun = false;
 }
 

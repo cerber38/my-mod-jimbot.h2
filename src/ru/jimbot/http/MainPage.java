@@ -175,11 +175,6 @@ if (MainProps.getStringProperty("http.user").equals("admin")
 con.print("<H3><FONT COLOR=\"#FF0000\">В целях безопасности как можно скорее измените "
 + "стандартный логин и пароль для доступа к этой странице! Рекомендуется также изменить порт.</FONT></H3>");
 }
-if (MainProps.checkNewVersion()) {
-con.print("<p>На сайте <A HREF=\"http://jimbot.ru\">jimbot.ru</A> Доступна новая версия!<br>");
-con.print(MainProps.getNewVerDesc().replaceAll("\n", "<BR>"));
-con.print("</p>");
-}
 con.print("<H3>Главное меню</H3>");
 con.print("<A HREF=\"" + con.getURI() + "?uid=" + uid + "&page=main_props\">"
 + "Основные настройки</A><br>");

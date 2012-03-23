@@ -30,12 +30,7 @@ import ru.jimbot.table.UserPreference;
 */
 public class MainProps {
 
-public static final String VERSION = "v.0.4.0 pre 4 (06/07/2009)";
-public static final int VER_INT = 18;
-private static int ver_no = 0;
-private static long ver_last_read = 0;
-private static String ver_desc = "";
-public static final String PROG_TITLE = "jImBot";
+public static final String VERSION = "jImBot v.0.4.0 pre 4 (22/03/2012)";
 public static final String PROPS_FILE = "./jimbot.xml";
 private static Properties appProps;
 private static Vector servers = new Vector();
@@ -54,7 +49,6 @@ public static final void setDefault() {
 appProps = new Properties();
 setStringProperty("icq.serverDefault", "login.icq.com");
 setIntProperty("icq.portDefault", 5190);
-setBooleanProperty("main.autoStart", true);
 setBooleanProperty("main.StartHTTP", true);
 setStringProperty("http.user", "admin"); // юзер для админки
 setStringProperty("http.pass", "admin"); // пароль для доступа в админку
@@ -63,8 +57,6 @@ setIntProperty("http.maxErrLogin", 3);
 setIntProperty("http.timeErrLogin", 10);
 setIntProperty("http.timeBlockLogin", 20);
 setIntProperty("srv.servicesCount", 0);
-setBooleanProperty("main.checkNewVer", true);
-
 setStringProperty("xmpp.status", "1");
 }
 private static String JabberStatus[][] = {{"1", "В сети"}, {"2", "Готов поболтать"},
@@ -73,8 +65,6 @@ private static String JabberStatus[][] = {{"1", "В сети"}, {"2", "Гото�
 public static UserPreference[] getUserPreference() {
 UserPreference[] p = {
 new UserPreference(UserPreference.CATEGORY_TYPE, "main", "Основные настройки", ""),
-new UserPreference(UserPreference.BOOLEAN_TYPE, "main.checkNewVer", "Уведомлять о новых версиях", getBooleanProperty("main.checkNewVer")),
-new UserPreference(UserPreference.BOOLEAN_TYPE, "main.autoStart", "Автозапуск при загрузке", getBooleanProperty("main.autoStart")),
 new UserPreference(UserPreference.BOOLEAN_TYPE, "main.StartHTTP", "Запускать HTTP сервер", getBooleanProperty("main.StartHTTP")),
 new UserPreference(UserPreference.INTEGER_TYPE, "http.delay", "Время жизни HTTP сессии", getIntProperty("http.delay")),
 new UserPreference(UserPreference.INTEGER_TYPE, "http.maxErrLogin", "Число ошибочных входов для блокировки", getIntProperty("http.maxErrLogin")),
@@ -112,9 +102,7 @@ ex.printStackTrace();
 * @return
 */
 public static boolean isIgnor(String uin) {
-if (ignor == null) {
-return false;
-}
+if (ignor == null) return false;
 return ignor.contains(uin);
 }
 
@@ -200,12 +188,8 @@ ex.printStackTrace();
 }
 
 public static String getAbout() {
-return PROG_TITLE + " " + VERSION + "\n(c) Spec, 2006-2009\n"
+return VERSION + "\n(c) Spec, 2006-2009\n"
 + "Поддержка проекта: http://jimbot.ru";
-}
-
-public static boolean isHide() {
-return Boolean.valueOf(getProperty("isHide", "true")).booleanValue();
 }
 
 public static final void load() {
@@ -267,67 +251,6 @@ s = bout.toString("windows-1251");
 Log.error("Ошибка HTTP при чтении новой версии", ex);
 }
 return s;
-}
-
-/**
-* Проверка на новую версию
-*
-* @return
-*/
-public static boolean checkNewVersion() {
-if (!getBooleanProperty("main.checkNewVer")) return false;
-if (ver_no == 0) readNewVer();
-if ((System.currentTimeMillis() - ver_last_read) > 24 * 3600000) readNewVer();
-return ver_no > VER_INT;
-}
-
-/**
-* Возвращает описание новой версии
-*
-* @return
-*/
-public static String getNewVerDesc() {
-return ver_desc;
-}
-
-/**
-* Читает информацию о новой версии с сайта
-*/
-private static void readNewVer() {
-String s = getStringFromHTTP("http://jimbot.ru/ver.txt");
-ver_no = VER_INT;
-ver_desc = "";
-ver_last_read = System.currentTimeMillis();
-if (s.equals("")) return;
-try {
-BufferedReader r = new BufferedReader(new StringReader(s));
-String sd = r.readLine();
-if (!sd.equals("#JimBot version file")) return;
-ver_no = Integer.parseInt(r.readLine());
-String cnt = r.readLine();
-counter(cnt);
-if (ver_no > VER_INT) {
-while (r.ready()) {
-String st = r.readLine();
-if (st == null) break;
-if (!st.equals("")) if (Integer.parseInt(st.split("#")[0]) == ver_no) ver_desc += st.split("#")[1] + '\n';
-}
-}
-r.close();
-} catch (Exception ex) {
-Log.error("Ошибка обработки описания новой версии", ex);
-}
-}
-
-private static void counter(String s) {
-try {
-String u = s.substring(8);
-u = u.replaceAll("@", "chat_ver=" + VERSION);
-u = u.replaceAll(" ", "%20");
-getStringFromHTTP(u);
-} catch (Exception e) {
-e.printStackTrace();
-}
 }
 
 public static void registerProperties(Properties _appProps) {

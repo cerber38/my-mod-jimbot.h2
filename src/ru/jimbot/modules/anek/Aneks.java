@@ -16,7 +16,8 @@
 package ru.jimbot.modules.anek;
 
 /**
-*
+* Анекдот
+* 
 * @author Prolubnikov Dmitry
 */
 public class Aneks {

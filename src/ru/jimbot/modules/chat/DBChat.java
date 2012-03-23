@@ -38,16 +38,13 @@ public DBChat(String name) throws Exception {
 serviceName = name;
 }
 
-public void createDB() {
-}
+public void createDB() {}
 
 /**
 * Запись лога в БД
 */
 public void log(int user, String sn, String type, String msg, int room) {
-if (!ChatProps.getInstance(serviceName).getBooleanProperty("chat.writeAllMsgs")) {
-return;
-}
+if (!ChatProps.getInstance(serviceName).getBooleanProperty("chat.writeAllMsgs")) return;
 try {
 PreparedStatement pst = getDb().prepareStatement("insert into log values(null, ?, ?, ?, ?, ?, ?)");
 pst.setTimestamp(1, new Timestamp(System.currentTimeMillis()));

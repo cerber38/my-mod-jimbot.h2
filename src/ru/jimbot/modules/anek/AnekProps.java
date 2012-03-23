@@ -34,10 +34,7 @@ public class AnekProps implements AbstractProps {
 public static HashMap<String, AnekProps> props = new HashMap<String, AnekProps>(MainProps.getServicesCount());
 public String PROPS_FILE = "";
 private String PROPS_FOLDER = "";
-public String ENCODING = "windows-1251";
 public Properties appProps;
-public Properties langProps;
-public boolean isLoaded = false;
 
 /**
 * Creates a new instance of AnekProps
@@ -53,7 +50,6 @@ AnekProps p = new AnekProps();
 p.PROPS_FILE = "./services/" + name + "/" + name + ".xml";
 p.PROPS_FOLDER = "./services/" + name;
 p.setDefault();
-//    		p.load();
 props.put(name, p);
 return p;
 }
@@ -250,10 +246,10 @@ try {
 FileInputStream fi = new FileInputStream(file);
 appProps.loadFromXML(fi);
 fi.close();
-Log.info("Load preferences ok");
+Log.info("Load Anek preferences ok");
 } catch (Exception ex) {
 ex.printStackTrace();
-Log.error("Error opening preferences: ");
+Log.error("Error opening Anek preferences");
 }
 }
 
@@ -265,10 +261,10 @@ if (!dir.exists()) dir.mkdirs();
 FileOutputStream fo = new FileOutputStream(file);
 appProps.storeToXML(fo, "jImBot properties");
 fo.close();
-Log.info("Save preferences ok");
+Log.info("Save Anek preferences ok");
 } catch (Exception ex) {
 ex.printStackTrace();
-Log.error("Error saving preferences: ");
+Log.error("Error saving Anek preferences");
 }
 }
 

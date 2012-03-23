@@ -836,6 +836,16 @@ return rw.getRooms();
 }
 
 /**
+ * Удаление комнаты
+ * 
+ * @param r
+ * @return 
+ */
+public boolean deleteRoom(Rooms r){
+return rw.deleteRoom(r);
+}
+
+/**
 * Sql запроса с возращаемым типом int
 *
 * @param sql

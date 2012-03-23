@@ -18,7 +18,6 @@ package ru.jimbot;
 import java.io.PrintStream;
 import java.util.Vector;
 import ru.jimbot.http.Server;
-import ru.jimbot.modules.WorkScript;
 import ru.jimbot.util.Log;
 import ru.jimbot.util.MainProps;
 import ru.jimbot.util.SystemErrLogger;
@@ -41,14 +40,9 @@ MainProps.load();
 Manager.getInstance();
 if (MainProps.getBooleanProperty("main.StartHTTP")) {
 try {
-Vector<String> v = WorkScript.getInstance("").listHTTPScripts();
-String[] s = new String[2 + v.size() * 2];
+String[] s = new String[2];
 s[0] = "/";
 s[1] = "ru.jimbot.http.MainPage";
-for (int i = 0; i < v.size(); i++) {
-s[i * 2 + 2] = v.get(i);
-s[i * 2 + 3] = "ru.jimbot.http.HTTPScriptRequest";
-}
 Server.startServer(s);
 } catch (Exception ex) {
 ex.printStackTrace();

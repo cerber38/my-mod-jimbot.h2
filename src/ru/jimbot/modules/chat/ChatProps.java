@@ -257,16 +257,16 @@ public String[] getAdmins() {
 return getStringProperty("bot.adminUIN").split(";");
 }
 
-public String getChatRules() {
-return loadText("./text/rules.txt");
+public String getChatRules(String name) {
+return loadText(".services/"+name+"/text/rules.txt");
 }
 
-public String getHelp1() {
-return loadText("./text/help1.txt");
+public String getHelp1(String name) {
+return loadText(".services/"+name+"/text/help1.txt");
 }
 
-public String getHelp2() {
-return loadText("./text/help2.txt");
+public String getHelp2(String name) {
+return loadText(".services/"+name+"/text/help2.txt");
 }
 
 public String loadText(String fname) {
@@ -289,10 +289,10 @@ try {
 FileInputStream fi = new FileInputStream(file);
 appProps.loadFromXML(fi);
 fi.close();
-Log.info("Load preferences ok");
+Log.info("Load Chat preferences ok");
 } catch (Exception ex) {
 ex.printStackTrace();
-Log.error("Error opening preferences: ");
+Log.error("Error Chat opening preferences");
 }
 }
 
@@ -304,10 +304,10 @@ if (!dir.exists()) dir.mkdirs();
 FileOutputStream fo = new FileOutputStream(file);
 appProps.storeToXML(fo, "jImBot properties");
 fo.close();
-Log.info("Save preferences ok");
+Log.info("Save Chat preferences ok");
 } catch (Exception ex) {
 ex.printStackTrace();
-Log.error("Error saving preferences: ");
+Log.error("Error Chat saving preferences");
 }
 }
 
