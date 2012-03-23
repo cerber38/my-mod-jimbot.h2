@@ -117,8 +117,8 @@ setStringProperty("chat.inviteDescription", "Для регистрации в ч
 setIntProperty("chat.floodCountLimit", 5);
 setIntProperty("chat.floodTimeLimit", 10);
 setIntProperty("chat.floodTimeLimitNoReg", 20);
-setStringProperty("db.user", "sa");
-setStringProperty("db.pass", "");
+setStringProperty("db.user", "sergey");
+setStringProperty("db.pass", "sergey");
 setBooleanProperty("chat.useCaptcha", false);
 setBooleanProperty("chat.isUniqueNick", false);
 setIntProperty("chat.maxNickChanged", 99);

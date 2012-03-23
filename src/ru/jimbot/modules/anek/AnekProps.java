@@ -78,8 +78,8 @@ setIntProperty("bot.adsRate", 3);
 setBooleanProperty("main.StartBot", false);
 setIntProperty("chat.MaxOutMsgSize", 500);
 setIntProperty("chat.MaxOutMsgCount", 5);
-setStringProperty("db.user", "sa");
-setStringProperty("db.pass", "");
+setStringProperty("db.user", "sergey");
+setStringProperty("db.pass", "sergey");
 }
 
 private String[][] icqStatus = {{"0", "В сети"}, {"268435456", "Не в сети"}, {"10", "Занят"},

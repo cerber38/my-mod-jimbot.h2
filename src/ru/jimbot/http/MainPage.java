@@ -254,6 +254,10 @@ if (!Manager.getInstance().getServiceNames().contains(ns)) {
 HttpUtil.error(con, "Отсутствует сервис с таким именем!");
 return;
 }
+if(Manager.getInstance().getService(ns).getIcqProcess(0) == null){
+printMsg(con, "srvs_props_uin", "Нет уинов или сервис не был запущен!");
+return;
+}
 con.print(HttpUtil.HTML_HEAD + "<meta http-equiv=\"Refresh\" content=\"3; url="
 + con.getURI() + "?uid=" + uid + "&page=srvs_stats&ns=" + ns + "\" />"
 + "<TITLE>JimBot " + MainProps.VERSION + " </TITLE></HEAD>" + HttpUtil.BODY

@@ -83,7 +83,7 @@ ex.printStackTrace();
 if ((System.currentTimeMillis() - lastConnect) < 30000) return false;
 try {
 Class.forName("org.h2.Driver");
-db = DriverManager.getConnection("jdbc:h2:services/" + ServisName + "/db/new", user, pass);
+db = DriverManager.getConnection("jdbc:h2:services/" + ServisName + "/db/base", user, pass);
 } catch (Exception ex) {
 ex.printStackTrace();
 f = false;
